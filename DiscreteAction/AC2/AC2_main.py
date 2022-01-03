@@ -3,8 +3,8 @@ import gym
 
 from torch.distributions import Categorical
 
-from Policy_gradient.AC_algorithm.TD_Actor_NN import Actor_net
-from Policy_gradient.AC_algorithm.Critic_NN import Critic_NN
+from AC2.TD_Actor_NN import Actor_net
+from AC2.Critic_NN import Critic_NN
 
 torch.manual_seed(958)
 env = gym.make("CartPole-v0")
