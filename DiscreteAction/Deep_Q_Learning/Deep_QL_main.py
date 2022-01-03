@@ -1,6 +1,6 @@
 import gym
 import torch.nn as nn
-from Deep_Q_Net.Q_NN_2 import Q_net
+from Deep_Q_Learning.Q_NN import Q_net
 import numpy as np
 import torch
 import random
