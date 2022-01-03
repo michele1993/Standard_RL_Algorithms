@@ -1,4 +1,4 @@
-# Implementation of standard deep reinforcement learning algorithms
+# Implementation of standard deep RL algorithms
 
 This repository contains the implementation of some of the standard deep reinforcement learning algorithms, divided in discrete and continous action spaces. These algorithms included Deep-Q-Learning, REINFORCE (with a baseline), a TD0 actor-critic algorithms (AC2) and PPO for the OpenAI Cartpole. There is also a DDPG implementation for the OpenAI Inverted Pendulum environment.  
 
