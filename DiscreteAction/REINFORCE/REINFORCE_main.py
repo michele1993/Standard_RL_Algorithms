@@ -108,4 +108,4 @@ for i in range(n_episodes):
         training_acc.append(aver_acc)
 
 # Save training accuracy
-torch.save(training_acc,"/Users/michelegaribbo/Desktop/Results/REINFORCE_accuracy.pt")
+#torch.save(training_acc,"/Users/michelegaribbo/Desktop/Results/REINFORCE_accuracy.pt")
