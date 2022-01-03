@@ -68,7 +68,7 @@ for ep in range(n_episodes):
 
 
 # Save training accuracy
-torch.save(training_acc,"/Users/michelegaribbo/Desktop/Results/AC2_accuracy.pt")
+#torch.save(training_acc,"/Users/michelegaribbo/Desktop/Results/AC2_accuracy.pt")
 
 
 
