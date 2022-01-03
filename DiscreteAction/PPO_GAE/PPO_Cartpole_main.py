@@ -11,7 +11,7 @@ from Policy_gradient.PPO_GAE.PPO_alg import PPO
 
 
 
-n_episodes= 10000
+n_episodes= 2000
 PPO_steps = 200
 std = 0.3
 gamma = 0.99
@@ -19,7 +19,7 @@ ln_rate_c = 0.001
 ln_rate_a = 0.0001
 t_printing = 100
 
-
+torch.manual_seed(958)
 env = gym.make("CartPole-v1")
 
 
@@ -33,6 +33,7 @@ ppo = PPO(model_actor,model_critc)
 
 
 accuracy = []
+training_acc = []
 
 actor_cost = 0
 critic_cost = 0
@@ -43,16 +44,12 @@ for ep in range(n_episodes):
 
     actions = []
 
-    #values = torch.empty(0, dtype=torch.double)
     values = []
 
-    #rewards = torch.empty(0)
     rewards = []
 
-    #log_ps = torch.empty(0,dtype=torch.double)
     log_ps = []
 
-    #masks = torch.empty(0, dtype= bool) # in case game finishes before end of PPO steps
     masks = []
 
 
@@ -67,7 +64,6 @@ for ep in range(n_episodes):
         v_value = model_critc(c_state)
 
 
-        #d = Normal(action_mean,std)
         d = Categorical(action_mean)
         action = d.sample()
         log_p = d.log_prob(action)
@@ -79,16 +75,12 @@ for ep in range(n_episodes):
         states.append(c_state)
         actions.append(action.detach())
 
-        #values = torch.cat([values, v_value])
         values.append(v_value.detach())
 
-        #rewards = torch.cat([rewards,torch.unsqueeze(torch.tensor(rwd), dim=-1)])
         rewards.append(torch.tensor(rwd))
 
-        #log_ps = torch.cat([log_ps, torch.unsqueeze(log_p, dim=-1)])
         log_ps.append(log_p.detach())
 
-        #masks = torch.cat([masks, torch.unsqueeze(torch.tensor(mask), dim=-1)])
         masks.append(torch.tensor(mask))
 
         c_state = obs
@@ -101,8 +93,7 @@ for ep in range(n_episodes):
 
     # get prediction for last state, since exited the loop before computing it
     last_v_value = model_critc(torch.FloatTensor(c_state)).detach()
-    #values = torch.cat([values, last_v_value])
-    #values.append(last_v_value.detach())
+
 
     returns = model_critc.GAE(values,last_v_value ,rewards, masks)
 
@@ -127,8 +118,14 @@ for ep in range(n_episodes):
 
     if ep % t_printing == 0:
 
-        print("EP: ", ep, " accuracy: ", sum(accuracy)/t_printing, " critic: ", critic_cost/t_printing, " actor: ", actor_cost/t_printing)
+        avr_acc = sum(accuracy)/t_printing
+        print("EP: ", ep, " accuracy: ", avr_acc, " critic: ", critic_cost/t_printing, " actor: ", actor_cost/t_printing)
 
         actor_cost = 0
         critic_cost = 0
         accuracy = []
+
+        training_acc.append(avr_acc)
+
+# Save training accuracy
+#torch.save(training_acc,"/Users/michelegaribbo/Desktop/Results/PPO_accuracy.pt")
