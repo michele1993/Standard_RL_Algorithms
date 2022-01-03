@@ -1,6 +1,3 @@
-# By summing each time-step cost and then performing one update for the episode the policy still learns, but it's much slower in
-# learning as it should be, since the gradient of a sum should be equal to the sum of the gradients, but I guess by updating the baseline
-# every time-step, you get more updated advantages when computing the policy gradient for each time-step, thus reducing the variance ?
 
 import torch
 import gym
@@ -11,11 +8,9 @@ import numpy as np
 torch.manual_seed(958)
 
 from torch.distributions import Categorical
-#from torch.distributions import Bernoulli
 
-
-from Policy_gradient.Vanilla_policy_gradient.Policy_network import Policy_net
-from Policy_gradient.Vanilla_policy_gradient.Baseline_net import Baseline_nn
+from REINFORCE.Policy_network import Policy_net
+from REINFORCE.Baseline_net import Baseline_nn
 
 n_episodes= 2000
 discount = 0.99
