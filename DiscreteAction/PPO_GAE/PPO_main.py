@@ -3,9 +3,9 @@ import torch
 import torch.nn
 from torch.distributions import Categorical
 
-from Policy_gradient.PPO_GAE.Actor_NN import Actor_NN
-from Policy_gradient.PPO_GAE.GAE_critic import Critic_NN
-from Policy_gradient.PPO_GAE.PPO_alg import PPO
+from PPO_GAE.Actor_NN import Actor_NN
+from PPO_GAE.GAE_critic import Critic_NN
+from PPO_GAE.PPO_alg import PPO
 
 
 
