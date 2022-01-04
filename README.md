@@ -7,5 +7,5 @@ For the sake of practice, I compared the performance of the algorithms on the Ca
 
 ![This is an image](/DiscreteAction/Images/CartPole_Comparison.png)
 ![This is an image](/ContinousAction/Images/DDPG_acc.png)
-![This is an image](/ContinousAction/Images/TD3_acc.png)
+![This is an image](/ContinousAction/Images/TD3.png)
 
