@@ -9,8 +9,8 @@ torch.manual_seed(958)
 
 from torch.distributions import Categorical
 
-from REINFORCE.Policy_network import Policy_net
-from REINFORCE.Baseline_net import Baseline_nn
+from Policy_network import Policy_net
+from Baseline_net import Baseline_nn
 
 n_episodes= 2000
 discount = 0.99
