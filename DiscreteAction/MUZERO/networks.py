@@ -168,7 +168,7 @@ class MuZeroNet(nn.Module):
 
     def _transform_from_2hot(self, probs, min_value, max_value):
         """Transforms from a categorical distribution to a scalar."""
-        support_space = torch.linspace(min_value,max_value, self.support_size).to(self.dev)
+        support_space = torch.linspace(min_value,max_value, self.support_size, device=self.dev)
         support_space = support_space.expand_as(probs)
         scalar = torch.sum(probs * support_space, dim=-1, keepdim=True)
         return scalar
