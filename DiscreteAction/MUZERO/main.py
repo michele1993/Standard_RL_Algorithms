@@ -25,15 +25,36 @@ def get_env(env_name):
 
 
 """ Train Muzero for CartPole or Tower of Hanoi environments"""
-## ======= Set seeds for debugging =======
-s = 1 # seed
+## ======= Set useful variables ====
+s = 1 # Set for performance comparison - change for random seed 
 torch.manual_seed(s)
 np.random.seed(s)
 setup_logger(s)
-dev = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+
+if torch.cuda.is_available():
+    dev=torch.device('cuda')
+# Much slower on MAC gpu, probably due to seq. nature of alg. and little paralellisation
+#elif hasattr(torch.backends, 'mps') and torch.backends.mps.is_available(): ## for MAC GPU usage
+#    dev=torch.device('mps')
+else:
+    dev=torch.device('cpu')
+
+save_results = False
 
 ## ======= Select the environment ========
-env_n = 0 # 0: 'Hanoi', 1: 'CartPole'
+env_n = 1 # 0: 'Hanoi', 1: 'CartPole'
+## Set a good set of hyper-params of each env
+if env_n ==0:
+    env_name = 'Hanoi' 
+    discount = 0.8
+    n_mcts_simulations = 25 #11 during acting n. of mcts passes for each step
+    lr = 0.002
+elif env_n == 1:
+    env_name = "CartPole-v1" 
+    batch_s = 256
+    discount = 0.997
+    n_mcts_simulations=50
+    lr=0.005
 
 ## ========= Useful variables: ===========
 training_loops = 5000
@@ -47,19 +68,6 @@ n_TD_step = 10
 buffer_size = 50000 #int(1e6)
 batch_s = 256
 priority_replay = True
-
-## Set a good set of hyper-params of each env
-if env_n ==0:
-    env_name = 'Hanoi' 
-    discount = 0.8
-    n_mcts_simulations = 25 #11 during acting n. of mcts passes for each step
-    lr = 0.002
-elif env_n == 1:
-    env_name = "CartPole-v1" 
-    batch_s = 256
-    discount = 0.997
-    n_mcts_simulations=50
-    lr=0.005
 
 ## ========= Initialise env ========
 env, s_space_size, n_action, max_steps, n_disks = get_env(env_name)
@@ -79,9 +87,10 @@ tot_acc = muzero.training_loop(training_loops, min_replay_size)
 ## ===== Save results =========
 file_indx = 1 # label to denote different runs
 
-# Create directory to store results
-file_dir = os.path.dirname(os.path.abspath(__file__))
+# Create directories to store results
+file_dir = os.path.dirname(os.path.abspath(__file__)) # get path of current file
 file_dir = os.path.join(file_dir,'results',str(file_indx))
+acc_dir = os.path.join(file_dir,'training_accuracy.pt')
 model_dir = os.path.join(file_dir,'muzero_model.pt')
 
 if save_results:
@@ -92,7 +101,6 @@ if save_results:
     with open(os.path.join(file_dir,'commands.txt'), 'w') as f:
         f.write(command_line)
     # Store accuracy
-    acc_dir = os.path.join(file_dir,'training_accuracy.pt')
     torch.save(torch.tensor(tot_acc),acc_dir)
     # Store model
     torch.save({
